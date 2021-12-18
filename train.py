@@ -1,13 +1,8 @@
-import os
-import sys
-import cv2
 from final import detect_and_score
-from hough_circles_trackbar import detect_and_show
-from util import im_show
+# from hough_circles_trackbar import detect_and_show
 import tqdm as tq
 import numpy as np
-import torch
-import torch.utils.data
+# import torch.utils.data
 from apple_dataset import AppleDataset
 
 def collate_fn(batch):

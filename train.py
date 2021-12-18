@@ -13,25 +13,23 @@ from apple_dataset import AppleDataset
 def collate_fn(batch):
     return tuple(zip(*batch))
 
-def get_dataset(data_dir):
-    # device = torch.device('cpu')
-    dataset = AppleDataset(data_dir, None)
-    return dataset
+class Evaluator:
+    def __init__(self, data_dir = 'MiniApples/detection/train'):
+        # device = torch.device('cpu')
+        self.dataset = AppleDataset(data_dir, None)
 
-def train_all():
-    dataset = get_dataset('MiniApples/detection/train')
-    # data_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, collate_fn=collate_fn)
-    scores = []
-    for img, mask in tq.tqdm(dataset):
-        mask[mask>0] = 1
-        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-        # detect_and_show(img)
-        s = detect_and_score(img, mask)
-        scores.append(s)
-    return np.array(scores).mean()
+    def eval_model(self):
+        # data_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, collate_fn=collate_fn)
+        scores = []
+        for img, mask in tq.tqdm(self.dataset):
+            # detect_and_show(img)
+            s = detect_and_score(img, mask)
+            scores.append(s)
+        return np.array(scores).mean()
 
 def main():
-    avg_score = train_all()
+    ev = Evaluator()
+    avg_score = ev.eval_model()
     print('Average IoU = ', avg_score)
 
 if __name__ == "__main__":

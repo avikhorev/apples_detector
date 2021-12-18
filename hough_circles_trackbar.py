@@ -1,7 +1,6 @@
 import cv2
 from final import *
 
-
 def detect_and_show(img):
     img_orig = img
     win_name = 'image'

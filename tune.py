@@ -3,9 +3,7 @@ import optuna
 import traceback
 
 import train
-import hough_circles_trackbar as detector
-
-PAR = detector.PAR
+from final import PAR
 
 OPTUNA_STUDY_NAME = 'study_1'
 

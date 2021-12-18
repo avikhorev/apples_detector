@@ -8,7 +8,7 @@ from PIL import Image
 # and extracts bounding boxes on the fly
 #####################################
 class AppleDataset(object):
-    def __init__(self, root_dir, transforms):
+    def __init__(self, root_dir='MiniApples/detection/train'):
         self.root_dir = root_dir
 
         # Load all image and mask files, sorting them to ensure they are aligned

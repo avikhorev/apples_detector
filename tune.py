@@ -10,7 +10,7 @@ OPTUNA_STUDY_NAME = 'study_1'
 def suggest(param_name, suggest_fn, *suggest_args, par=PAR):
     par[param_name] = suggest_fn(param_name, *suggest_args)
 
-def predict_obj(trial):
+def predict_obj(trial, evaluator):
     suggest( 'blur', trial.suggest_int, 1, 29, 2)
 
     suggest( 'hMin', trial.suggest_int, 0, 179)
@@ -30,9 +30,11 @@ def predict_obj(trial):
     suggest( 'radius',   trial.suggest_int, 1, 100)
 
     # suggest( 'nfeatures', trial.suggest_int, 0, 999, par=PAR_SIFT)
-    return train.train_all()
+    return evaluator.eval_model()
 
 def optimize_preds():
+
+    ev = train.Evaluator()
 
     study_name = OPTUNA_STUDY_NAME
     storage_name = f"sqlite:///{study_name}.db"
@@ -47,7 +49,7 @@ def optimize_preds():
 
     try:
         study.optimize(
-            lambda trial: predict_obj(trial),
+            lambda trial: predict_obj(trial, ev),
             catch=(RuntimeError,),
             gc_after_trial=False,
             show_progress_bar=True

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-PAR = {'blur': 19, 'hMin': 0, 'hMax': 255, 'sMin': 0, 'sMax': 255, 'vMin': 0, 'vMax': 255, 'binarize': False, 'equalize_hist': False, 'dp': 2.49615668330778, 'param1': 11, 'param2': 25, 'min_dist': 3, 'radius': 11}
+PAR = {'binarize': False, 'blur': 25, 'dp': 1.3645692266889489, 'equalize_hist': False, 'hMax': 27, 'hMin': 151, 'min_dist': 16, 'param1': 58, 'param2': 15, 'radius': 1, 'sMax': 180, 'sMin': 103, 'vMax': 200, 'vMin': 16}
 
 def get_score(mask1, mask2):
     I = np.bitwise_and(mask1,mask2).sum()

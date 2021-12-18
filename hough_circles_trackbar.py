@@ -1,5 +1,6 @@
 import cv2
 from final import *
+from apple_dataset import AppleDataset
 
 def detect_and_show(img):
     img_orig = img
@@ -74,8 +75,10 @@ def detect_and_show(img):
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    img_path = 'apple.jpg'
-    # img_path = 'photo_2021-12-17_20-42-08.jpg'
 
-    cimg_orig = cv2.imread(img_path)
-    detect_and_show(cimg_orig)
+    dset = AppleDataset()
+    cimg,_ = dset[0]
+    # img_path = 'apple.jpg'
+    # img_path = 'photo_2021-12-17_20-42-08.jpg'
+    # cimg = cv2.imread(img_path)
+    detect_and_show(cimg)

@@ -14,9 +14,8 @@ def collate_fn(batch):
     return tuple(zip(*batch))
 
 class Evaluator:
-    def __init__(self, data_dir = 'MiniApples/detection/train'):
-        # device = torch.device('cpu')
-        self.dataset = AppleDataset(data_dir, None)
+    def __init__(self):
+        self.dataset = AppleDataset()
 
     def eval_model(self):
         # data_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, collate_fn=collate_fn)

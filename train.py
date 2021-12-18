@@ -31,6 +31,7 @@ def train_all():
     dataset = get_dataset()
     # data_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, collate_fn=collate_fn)
     scores = []
+    # i = 0
     for img, mask in tq.tqdm(dataset):
         mask[mask>0] = 255
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
@@ -38,6 +39,9 @@ def train_all():
 
         s = detect_and_score(img, mask)
         scores.append(s)
+        # i += 1
+        # if i>100:
+        #     break
 
         # im_show(image)
         # targets = [{k: v.to(device) for k, v in t.items()} for t in targets]
@@ -45,6 +49,14 @@ def train_all():
         # im_name = data_loader.dataset.get_img_name(im_id)
     return np.array(scores).mean()
 
-if __name__ == "__main__":
+def main():
     avg_score = train_all()
     print('Average IoU = ', avg_score)
+
+if __name__ == "__main__":
+    main()
+    # import cProfile, pstats
+    # cProfile.run("main()", "{}.profile".format(__file__))
+    # s = pstats.Stats("{}.profile".format(__file__))
+    # s.strip_dirs()
+    # s.sort_stats("time").print_stats(10)

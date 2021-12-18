@@ -13,7 +13,7 @@ def suggest(param_name, suggest_fn, *suggest_args, par=PAR):
     par[param_name] = suggest_fn(param_name, *suggest_args)
 
 def predict_obj(trial):
-    suggest( 'blur', trial.suggest_int, 1, 30, 2)
+    suggest( 'blur', trial.suggest_int, 1, 29, 2)
 
     suggest( 'hMin', trial.suggest_int, 0, 179)
     suggest( 'hMax', trial.suggest_int, 0, 179)

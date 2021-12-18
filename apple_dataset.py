@@ -16,6 +16,10 @@ class AppleDataset(object):
         self.imgs = list(sorted(os.listdir(os.path.join(root_dir, "images"))))
         self.masks = list(sorted(os.listdir(os.path.join(root_dir, "masks"))))
 
+        filt = lambda fn: fn.startswith('20150921_131234')
+        self.imgs = list(filter(filt, self.imgs))
+        self.masks = list(filter(filt, self.masks))
+
     def __getitem__(self, idx):
         # Load images and masks
         img_path = os.path.join(self.root_dir, "images", self.imgs[idx])

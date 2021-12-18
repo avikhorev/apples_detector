@@ -38,7 +38,7 @@ def optimize_preds():
     storage_name = f"sqlite:///{study_name}.db"
     sampler = optuna.samplers.TPESampler(multivariate=True)
     study = optuna.create_study(
-        # direction='maximize',
+        direction='maximize',
         study_name=study_name
         ,storage=storage_name
         ,load_if_exists=True

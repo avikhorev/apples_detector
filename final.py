@@ -24,7 +24,7 @@ def get_circles(gray_img):
     param2 = PAR['param2']
     min_dist = PAR['min_dist']+1
     min_radius = PAR['radius']
-    max_radius = PAR['radius']+5
+    max_radius = PAR['radius']+10
     circles = cv2.HoughCircles(
                         gray_img,
                         cv2.HOUGH_GRADIENT,

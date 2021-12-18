@@ -24,10 +24,10 @@ def predict_obj(trial):
     suggest( 'equalize_hist', trial.suggest_categorical, [False,True])
 
     suggest( 'dp', trial.suggest_float, 1.0, 9.0 )
-    suggest( 'param1', trial.suggest_int, 1, 500)
-    suggest( 'param2', trial.suggest_int, 1, 100)
-    suggest( 'min_dist', trial.suggest_int, 1, 1000)
-    suggest( 'radius', trial.suggest_int, 1, 100)
+    suggest( 'param1',   trial.suggest_int, 1, 100)
+    suggest( 'param2',   trial.suggest_int, 1, 100)
+    suggest( 'min_dist', trial.suggest_int, 1, 200)
+    suggest( 'radius',   trial.suggest_int, 1, 100)
 
     # suggest( 'nfeatures', trial.suggest_int, 0, 999, par=PAR_SIFT)
     return train.train_all()

@@ -23,7 +23,7 @@ def train_all():
     # data_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, collate_fn=collate_fn)
     scores = []
     for img, mask in tq.tqdm(dataset):
-        mask[mask>0] = 255
+        mask[mask>0] = 1
         img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
         # detect_and_show(img)
         s = detect_and_score(img, mask)

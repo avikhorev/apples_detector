@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-PAR = {'blur': 19, 'hMin': 0, 'hMax': 255, 'sMin': 0, 'sMax': 255, 'vMin': 0, 'vMax': 255, 'binarize': False, 'equalize_hist': False, 'dp': 2.49615668330778, 'param1': 11, 'param2': 25, 'min_dist': 3, 'min_radius': 1, 'max_radius': 100}
+PAR = {'blur': 19, 'hMin': 0, 'hMax': 255, 'sMin': 0, 'sMax': 255, 'vMin': 0, 'vMax': 255, 'binarize': False, 'equalize_hist': False, 'dp': 2.49615668330778, 'param1': 11, 'param2': 25, 'min_dist': 3, 'radius': 11}
 
 def get_score(mask1, mask2):
     I = np.bitwise_and(mask1,mask2).sum()
@@ -23,8 +23,8 @@ def get_circles(gray_img):
     param1 = PAR['param1']+1
     param2 = PAR['param2']
     min_dist = PAR['min_dist']+1
-    min_radius = PAR['min_radius']
-    max_radius = PAR['max_radius']
+    min_radius = PAR['radius']
+    max_radius = PAR['radius']+5
     circles = cv2.HoughCircles(
                         gray_img,
                         cv2.HOUGH_GRADIENT,

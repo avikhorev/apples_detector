@@ -29,8 +29,7 @@ def predict_obj(trial):
     suggest( 'param1', trial.suggest_int, 1, 500)
     suggest( 'param2', trial.suggest_int, 1, 100)
     suggest( 'min_dist', trial.suggest_int, 1, 1000)
-    suggest( 'min_radius', trial.suggest_int, 1, 100)
-    suggest( 'max_radius', trial.suggest_int, 1, 100)
+    suggest( 'radius', trial.suggest_int, 1, 100)
 
     # suggest( 'nfeatures', trial.suggest_int, 0, 999, par=PAR_SIFT)
     return train.train_all()

@@ -23,8 +23,7 @@ def detect_and_show(img):
     cv2.createTrackbar('param1', win_name, 1, 500, nothing)
     cv2.createTrackbar('param2', win_name, 1, 100, nothing)
     cv2.createTrackbar('min_dist', win_name, 1, 1000, nothing)
-    cv2.createTrackbar('max_radius', win_name, 1, 100, nothing)
-    cv2.createTrackbar('max_radius', win_name, 1, 100, nothing)
+    cv2.createTrackbar('radius', win_name, 1, 100, nothing)
 
     cv2.setTrackbarPos('hMin', win_name, PAR['hMin'])
     cv2.setTrackbarPos('hMax', win_name, PAR['hMax'])
@@ -35,11 +34,10 @@ def detect_and_show(img):
 
     cv2.setTrackbarPos('blur', win_name, PAR['blur'])
 
-    cv2.setTrackbarPos('param1',     win_name, PAR['param1'])
-    cv2.setTrackbarPos('param2',     win_name, PAR['param2'])
-    cv2.setTrackbarPos('min_dist',   win_name, PAR['min_dist'])
-    cv2.setTrackbarPos('max_radius', win_name, PAR['max_radius'])
-    cv2.setTrackbarPos('max_radius', win_name, PAR['max_radius'])
+    cv2.setTrackbarPos('param1',   win_name, PAR['param1'])
+    cv2.setTrackbarPos('param2',   win_name, PAR['param2'])
+    cv2.setTrackbarPos('min_dist', win_name, PAR['min_dist'])
+    cv2.setTrackbarPos('radius',   win_name, PAR['radius'])
 
     while True:
         img = img_orig
@@ -57,8 +55,7 @@ def detect_and_show(img):
         PAR['param1'] = cv2.getTrackbarPos('param1', win_name)
         PAR['param2'] = cv2.getTrackbarPos('param2', win_name)
         PAR['min_dist'] = cv2.getTrackbarPos('min_dist', win_name)
-        PAR['min_radius'] = cv2.getTrackbarPos('max_radius', win_name)
-        PAR['max_radius'] = cv2.getTrackbarPos('max_radius', win_name)
+        PAR['radius'] = cv2.getTrackbarPos('radius', win_name)
 
         img     = blur(img)
         mask_hsv = color_thresholding(img)

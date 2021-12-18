@@ -31,10 +31,13 @@ def main():
     avg_score = ev.eval_model()
     print('Average IoU = ', avg_score)
 
+def profile():
+    import cProfile, pstats
+    cProfile.run("main()", "{}.profile".format(__file__))
+    s = pstats.Stats("{}.profile".format(__file__))
+    s.strip_dirs()
+    s.sort_stats("time").print_stats(10)
+
 if __name__ == "__main__":
     main()
-    # import cProfile, pstats
-    # cProfile.run("main()", "{}.profile".format(__file__))
-    # s = pstats.Stats("{}.profile".format(__file__))
-    # s.strip_dirs()
-    # s.sort_stats("time").print_stats(10)
+    #profile()

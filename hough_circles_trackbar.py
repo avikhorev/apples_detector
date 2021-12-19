@@ -89,7 +89,7 @@ def detect_and_show(img, gt_mask):
         draw_text_in_corner(gt_mask, 'Ground truth mask')
 
         img = np.concatenate(
-            [img1, img_sep, img2, img_sep, img, img_sep, mask_circles, img_sep, gt_mask],
+            [img1, img_sep, img, img_sep, img2,img_sep, mask_circles, img_sep, gt_mask],
             axis=1
         )
         cv2.imshow(win_name, img)

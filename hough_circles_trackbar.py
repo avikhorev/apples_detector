@@ -6,7 +6,9 @@ def draw_circles(img, circles):
     for x,y,r in circles:
         cv2.circle(img, (x,y), r, (255,255,0), thickness=1)
         cv2.circle(img, (x,y), 2, (0,255,255), thickness=-1)
-    return img
+
+def draw_text_in_corner(img, text):
+    cv2.putText(img, text, (10,img.shape[0]-10), cv2.FONT_HERSHEY_COMPLEX, 1.2, (0,255,255), 2)
 
 def create_track_bar(param_name, win_name, min_val, max_val):
     nothing = lambda x: None
@@ -28,7 +30,7 @@ def read_all_track_bars(win_name):
         else:
             PAR[param_name] = cv2.getTrackbarPos(param_name, win_name)
 
-def detect_and_show(img):
+def detect_and_show(img, gt_mask):
     img_orig = img
     win_name = 'image'
     cv2.namedWindow( win_name, cv2.WINDOW_NORMAL )
@@ -56,6 +58,11 @@ def detect_and_show(img):
     create_track_bar('binarize', win_name, 0, 1)
     create_track_bar('equalize_hist', win_name, 0, 1)
 
+    img_sep = np.full( (img.shape[0],1,3), 255, dtype=np.uint8 )
+    gt_mask_orig = gt_mask.copy()
+    gt_mask[gt_mask>0]=255
+    gt_mask = cv2.cvtColor(gt_mask, cv2.COLOR_GRAY2BGR)
+
     while True:
         img = img_orig
 
@@ -66,16 +73,25 @@ def detect_and_show(img):
         img = cv2.bitwise_and(img, img, mask=mask_hsv)
         gray = to_gray(img)
         circles = get_circles(gray)
-        # mask_circles = get_mask(gray,circles)
-        # cimg = cv2.bitwise_and(cimg, cimg, mask=mask_circles)
-        gray = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
+        mask_circles = get_mask(gray,circles)
+        IoU = get_score(mask_circles, gt_mask_orig)
+        mask_circles[mask_circles>0]=255
+        mask_circles = cv2.cvtColor(mask_circles, cv2.COLOR_GRAY2BGR)
 
+        img1 = img_orig.copy()
         img2 = img_orig.copy()
         draw_circles(img2, circles)
-        # draw_circles(gray, circles)
-        # draw_circles(img, circles)
 
-        img = np.concatenate([img2, gray, img], axis=1)
+        draw_text_in_corner(img1, 'Original')
+        draw_text_in_corner(img, 'Color threshold')
+        draw_text_in_corner(img2, 'Detected circles')
+        draw_text_in_corner(mask_circles, f'Segmentation mask, IoU={IoU:.3f}')
+        draw_text_in_corner(gt_mask, 'Ground truth mask')
+
+        img = np.concatenate(
+            [img1, img_sep, img2, img_sep, img, img_sep, mask_circles, img_sep, gt_mask],
+            axis=1
+        )
         cv2.imshow(win_name, img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
@@ -85,8 +101,9 @@ def detect_and_show(img):
 if __name__ == "__main__":
 
     dset = AppleDataset()
-    for cimg,_ in dset:
+    for cimg,gt_mask in dset:
         # img_path = 'apple.jpg'
         # img_path = 'photo_2021-12-17_20-42-08.jpg'
         # cimg = cv2.imread(img_path)
-        detect_and_show(cimg)
+
+        detect_and_show(cimg, gt_mask)

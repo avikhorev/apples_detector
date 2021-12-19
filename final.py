@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-PAR = {'binarize': False, 'blur': 25, 'dp': 1.3645692266889489, 'equalize_hist': False, 'hMax': 27, 'hMin': 151, 'min_dist': 16, 'param1': 58, 'param2': 15, 'radius': 1, 'sMax': 180, 'sMin': 103, 'vMax': 200, 'vMin': 16}
+PAR = {'binarize': False, 'blur': 11, 'dp': 2.175253863611431, 'equalize_hist':False, 'hMax': 21, 'hMin': 146, 'min_dist': 2, 'param1': 31, 'param2': 28, 'radius': 2, 'sMax': 255, 'sMin': 104, 'vMax': 235, 'vMin': 20}
 
 def get_score(mask1, mask2):
     I = np.bitwise_and(mask1,mask2).sum()
@@ -21,7 +21,7 @@ def get_mask(img, circles):
 def get_circles(gray_img):
     dp = PAR['dp']
     param1 = PAR['param1']+1
-    param2 = PAR['param2']
+    param2 = PAR['param2']+1
     min_dist = PAR['min_dist']+1
     min_radius = PAR['radius']
     max_radius = PAR['radius']+20
@@ -38,7 +38,7 @@ def get_circles(gray_img):
     if circles is None:
         return []
     circles = np.uint16(circles[0,:])
-    return filter(lambda c: len(c.shape)>0, circles)
+    return list(filter(lambda c: len(c.shape)>0, circles))
 
 def blur(cimg):
     ker_sz = PAR['blur']
@@ -64,7 +64,7 @@ def color_thresholding(cimg):
     mask_hsv = (h<=hMax)|(h>=hMin) if hMin>hMax else (hMin<=h)&(h<=hMax)
     mask_hsv &= (sMin<=s)&(s<=sMax) & (vMin<=v)&(s<=vMax)
     mask_hsv = mask_hsv.astype(np.uint8)
-    return mask_hsv
+    return mask_hsv, cimg
 
 def to_gray(cimg):
     gray = cv2.cvtColor(cimg, cv2.COLOR_BGR2GRAY)
@@ -75,7 +75,7 @@ def to_gray(cimg):
 
 def detect_apples(cimg):
     cimg     = blur(cimg)
-    mask_hsv = color_thresholding(cimg)
+    mask_hsv,_ = color_thresholding(cimg)
     cimg = cv2.bitwise_and(cimg, cimg, mask=mask_hsv)
     gray = to_gray(cimg)
     circles = get_circles(gray)

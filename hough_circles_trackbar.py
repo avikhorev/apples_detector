@@ -2,10 +2,17 @@ import cv2
 from final import *
 from apple_dataset import AppleDataset
 
+def draw_circles(img, circles):
+    for x,y,r in circles:
+        cv2.circle(img, (x,y), r, (255,255,0), thickness=1)
+        cv2.circle(img, (x,y), 2, (0,255,255), thickness=-1)
+    return img
+
 def detect_and_show(img):
     img_orig = img
     win_name = 'image'
-    cv2.namedWindow( win_name, cv2.WINDOW_NORMAL | cv2.WINDOW_FULLSCREEN)
+    cv2.namedWindow( win_name, cv2.WINDOW_NORMAL )
+    cv2.setWindowProperty(win_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
     nothing = lambda x: None
 
@@ -24,6 +31,8 @@ def detect_and_show(img):
     cv2.createTrackbar('param2', win_name, 1, 100, nothing)
     cv2.createTrackbar('min_dist', win_name, 1, 1000, nothing)
     cv2.createTrackbar('radius', win_name, 1, 100, nothing)
+    cv2.createTrackbar('binarize', win_name, 0, 1, nothing)
+    cv2.createTrackbar('equalize_hist', win_name, 0, 1, nothing)
 
     cv2.setTrackbarPos('hMin', win_name, PAR['hMin'])
     cv2.setTrackbarPos('hMax', win_name, PAR['hMax'])
@@ -38,6 +47,8 @@ def detect_and_show(img):
     cv2.setTrackbarPos('param2',   win_name, PAR['param2'])
     cv2.setTrackbarPos('min_dist', win_name, PAR['min_dist'])
     cv2.setTrackbarPos('radius',   win_name, PAR['radius'])
+    cv2.setTrackbarPos('binarize', win_name, int(PAR['binarize']))
+    cv2.setTrackbarPos('equalize_hist',  win_name, int(PAR['equalize_hist']))
 
     while True:
         img = img_orig
@@ -56,19 +67,25 @@ def detect_and_show(img):
         PAR['param2'] = cv2.getTrackbarPos('param2', win_name)
         PAR['min_dist'] = cv2.getTrackbarPos('min_dist', win_name)
         PAR['radius'] = cv2.getTrackbarPos('radius', win_name)
+        PAR['binarize'] = cv2.getTrackbarPos('binarize', win_name)
+        PAR['equalize_hist'] = cv2.getTrackbarPos('equalize_hist', win_name)
 
         img     = blur(img)
-        mask_hsv = color_thresholding(img)
+        mask_hsv, img = color_thresholding(img)
         img = cv2.bitwise_and(img, img, mask=mask_hsv)
         gray = to_gray(img)
         circles = get_circles(gray)
         # mask_circles = get_mask(gray,circles)
         # cimg = cv2.bitwise_and(cimg, cimg, mask=mask_circles)
-        for x,y,r in circles:
-            cv2.circle(img, (x,y), r, (255,255,0), thickness=2)
-            cv2.circle(img, (x,y), 2, (0,255,255), thickness=-1)
+        gray = cv2.cvtColor(gray, cv2.COLOR_GRAY2BGR)
 
-        cv2.imshow(win_name, cv2.resize(img,[1200,600]))
+        img2 = img_orig.copy()
+        draw_circles(img2, circles)
+        # draw_circles(gray, circles)
+        # draw_circles(img, circles)
+
+        img = np.concatenate([img2, gray, img], axis=1)
+        cv2.imshow(win_name, img)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
@@ -77,8 +94,8 @@ def detect_and_show(img):
 if __name__ == "__main__":
 
     dset = AppleDataset()
-    cimg,_ = dset[0]
-    # img_path = 'apple.jpg'
-    # img_path = 'photo_2021-12-17_20-42-08.jpg'
-    # cimg = cv2.imread(img_path)
-    detect_and_show(cimg)
+    for cimg,_ in dset:
+        # img_path = 'apple.jpg'
+        # img_path = 'photo_2021-12-17_20-42-08.jpg'
+        # cimg = cv2.imread(img_path)
+        detect_and_show(cimg)

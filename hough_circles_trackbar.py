@@ -93,10 +93,13 @@ def detect_and_show(img, gt_mask):
             axis=1
         )
         cv2.imshow(win_name, img)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+        key = cv2.waitKey(1)
+        if key & 0xFF == ord('q'):
+            return True
+        if key & 0xFF == ord(' '):
             break
 
-    cv2.destroyAllWindows()
+    return False
 
 if __name__ == "__main__":
 
@@ -106,4 +109,7 @@ if __name__ == "__main__":
         # img_path = 'photo_2021-12-17_20-42-08.jpg'
         # cimg = cv2.imread(img_path)
 
-        detect_and_show(cimg, gt_mask)
+        done = detect_and_show(cimg, gt_mask)
+        cv2.destroyAllWindows()
+        if done: break
+

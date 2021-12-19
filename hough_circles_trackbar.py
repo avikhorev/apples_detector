@@ -8,67 +8,58 @@ def draw_circles(img, circles):
         cv2.circle(img, (x,y), 2, (0,255,255), thickness=-1)
     return img
 
+def create_track_bar(param_name, win_name, min_val, max_val):
+    nothing = lambda x: None
+    cv2.createTrackbar(param_name, win_name, min_val, max_val, nothing)
+    if type(PAR[param_name])==bool:
+        par_value = int(PAR[param_name])
+    elif type(PAR[param_name])==float:
+        par_value = int(PAR[param_name]*100)
+    else:
+        par_value = PAR[param_name]
+    cv2.setTrackbarPos(param_name, win_name, par_value)
+
+def read_all_track_bars(win_name):
+    for param_name in PAR:
+        if type(PAR[param_name])==bool:
+            PAR[param_name] = bool(cv2.getTrackbarPos(param_name, win_name))
+        elif type(PAR[param_name])==float:
+            PAR[param_name] = 1e-6 + cv2.getTrackbarPos(param_name, win_name)/100.
+        else:
+            PAR[param_name] = cv2.getTrackbarPos(param_name, win_name)
+
 def detect_and_show(img):
     img_orig = img
     win_name = 'image'
     cv2.namedWindow( win_name, cv2.WINDOW_NORMAL )
     cv2.setWindowProperty(win_name, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
 
-    nothing = lambda x: None
-
     # Hue is from 0-179 for Opencv
-    cv2.createTrackbar('hMin', win_name, 0, 179, nothing)
-    cv2.createTrackbar('hMax', win_name, 0, 179, nothing)
+    create_track_bar('hMin', win_name, 0, 179)
+    create_track_bar('hMax', win_name, 0, 179)
 
-    cv2.createTrackbar('sMin', win_name, 0, 255, nothing)
-    cv2.createTrackbar('sMax', win_name, 0, 255, nothing)
+    create_track_bar('sMin', win_name, 0, 255)
+    create_track_bar('sMax', win_name, 0, 255)
 
-    cv2.createTrackbar('VMin', win_name, 0, 255, nothing)
-    cv2.createTrackbar('vMax', win_name, 0, 255, nothing)
+    create_track_bar('vMin', win_name, 0, 255)
+    create_track_bar('vMax', win_name, 0, 255)
 
-    cv2.createTrackbar('blur', win_name, 1, 30, nothing)
-    cv2.createTrackbar('param1', win_name, 1, 500, nothing)
-    cv2.createTrackbar('param2', win_name, 1, 100, nothing)
-    cv2.createTrackbar('min_dist', win_name, 1, 1000, nothing)
-    cv2.createTrackbar('radius', win_name, 1, 100, nothing)
-    cv2.createTrackbar('binarize', win_name, 0, 1, nothing)
-    cv2.createTrackbar('equalize_hist', win_name, 0, 1, nothing)
+    create_track_bar('blur', win_name, 1, 30)
 
-    cv2.setTrackbarPos('hMin', win_name, PAR['hMin'])
-    cv2.setTrackbarPos('hMax', win_name, PAR['hMax'])
-    cv2.setTrackbarPos('sMin', win_name, PAR['sMin'])
-    cv2.setTrackbarPos('sMax', win_name, PAR['sMax'])
-    cv2.setTrackbarPos('vMin', win_name, PAR['vMin'])
-    cv2.setTrackbarPos('vMax', win_name, PAR['vMax'])
+    create_track_bar('dp', win_name, 10, 1000)
+    create_track_bar('param1', win_name, 1, 500)
+    create_track_bar('param2', win_name, 1, 100)
 
-    cv2.setTrackbarPos('blur', win_name, PAR['blur'])
+    create_track_bar('min_dist', win_name, 1, 1000)
+    create_track_bar('radius', win_name, 1, 100)
 
-    cv2.setTrackbarPos('param1',   win_name, PAR['param1'])
-    cv2.setTrackbarPos('param2',   win_name, PAR['param2'])
-    cv2.setTrackbarPos('min_dist', win_name, PAR['min_dist'])
-    cv2.setTrackbarPos('radius',   win_name, PAR['radius'])
-    cv2.setTrackbarPos('binarize', win_name, int(PAR['binarize']))
-    cv2.setTrackbarPos('equalize_hist',  win_name, int(PAR['equalize_hist']))
+    create_track_bar('binarize', win_name, 0, 1)
+    create_track_bar('equalize_hist', win_name, 0, 1)
 
     while True:
         img = img_orig
 
-        PAR['hMin'] = cv2.getTrackbarPos('hMin', win_name)
-        PAR['hMax'] = cv2.getTrackbarPos('hMax', win_name)
-        PAR['sMin'] = cv2.getTrackbarPos('sMin', win_name)
-        PAR['sMax'] = cv2.getTrackbarPos('sMax', win_name)
-        PAR['vMin'] = cv2.getTrackbarPos('VMin', win_name)
-        PAR['vMax'] = cv2.getTrackbarPos('vMax', win_name)
-
-        PAR['blur'] = cv2.getTrackbarPos('blur', win_name)
-
-        PAR['dp'] = 2
-        PAR['param1'] = cv2.getTrackbarPos('param1', win_name)
-        PAR['param2'] = cv2.getTrackbarPos('param2', win_name)
-        PAR['min_dist'] = cv2.getTrackbarPos('min_dist', win_name)
-        PAR['radius'] = cv2.getTrackbarPos('radius', win_name)
-        PAR['binarize'] = cv2.getTrackbarPos('binarize', win_name)
-        PAR['equalize_hist'] = cv2.getTrackbarPos('equalize_hist', win_name)
+        read_all_track_bars(win_name)
 
         img     = blur(img)
         mask_hsv, img = color_thresholding(img)

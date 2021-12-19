@@ -23,7 +23,7 @@ def predict_obj(trial, evaluator):
     suggest( 'binarize',      trial.suggest_categorical, [False,True])
     suggest( 'equalize_hist', trial.suggest_categorical, [False,True])
 
-    suggest( 'dp', trial.suggest_float, 1.0, 9.0 )
+    suggest( 'dp', trial.suggest_float, 1.0, 20.0 )
     suggest( 'param1',   trial.suggest_int, 1, 100)
     suggest( 'param2',   trial.suggest_int, 1, 100)
     suggest( 'min_dist', trial.suggest_int, 1, 200)

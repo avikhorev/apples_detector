@@ -3,10 +3,6 @@ import numpy as np
 import cv2
 from PIL import Image
 
-#####################################
-# Class that takes the input instance masks
-# and extracts bounding boxes on the fly
-#####################################
 class AppleDataset(object):
     def __init__(self, root_dir='MiniApples/detection/train'):
         self.root_dir = root_dir
@@ -26,11 +22,11 @@ class AppleDataset(object):
             mask_path = os.path.join(self.root_dir, "masks", mask_f)
             img = Image.open(img_path)
             mask = Image.open(mask_path)
-            # Each color of mask corresponds to a different instance
-            # with 0 being the background
             img = np.array(img)
             mask = np.array(mask)
-            mask[mask>0] = 1
+            # Each color of mask corresponds to a different instance
+            # with 0 being the background
+            mask[mask>0] = 1 # merge all instances
             self.imgs.append( cv2.cvtColor(img,cv2.COLOR_RGB2BGR) )
             self.masks.append( mask )
 

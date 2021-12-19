@@ -1,9 +1,13 @@
+##################################################################
+# Training and evaluation module
+##################################################################
+
+
 from final import detect_and_score
-# from hough_circles_trackbar import detect_and_show
 import tqdm as tq
 import numpy as np
-# import torch.utils.data
 from apple_dataset import AppleDataset
+# from hough_circles_trackbar import detect_and_show
 
 def collate_fn(batch):
     return tuple(zip(*batch))

@@ -1,3 +1,9 @@
+###################################################################
+# This module contains main apples segmentation pipeline functions:
+# Image bluring, color thresholding, circle hough transform
+# and dictionary of parameters to be optimized by the tune.py tool
+###################################################################
+
 import cv2
 import numpy as np
 
@@ -46,7 +52,6 @@ def blur(cimg):
     return cv2.GaussianBlur(cimg, (ker_sz,ker_sz), 0)
 
 def color_thresholding(cimg):
-    #cimg[..., ::-1]
     hsv = cv2.cvtColor(cimg, cv2.COLOR_BGR2HSV)
 
     if PAR['equalize_hist']:
@@ -68,7 +73,6 @@ def color_thresholding(cimg):
 
 def to_gray(cimg):
     gray = cv2.cvtColor(cimg, cv2.COLOR_BGR2GRAY)
-    # result[result==0] = 255
     if PAR['binarize']:
         gray = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY|cv2.THRESH_OTSU)[1]
     return gray

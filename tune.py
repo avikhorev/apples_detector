@@ -1,4 +1,7 @@
-import cv2
+##################################################################
+# Hyper-parameters tuning tool
+##################################################################
+
 import optuna
 import traceback
 
@@ -29,7 +32,6 @@ def predict_obj(trial, evaluator):
     suggest( 'min_dist', trial.suggest_int, 1, 200)
     suggest( 'radius',   trial.suggest_int, 1, 100)
 
-    # suggest( 'nfeatures', trial.suggest_int, 0, 999, par=PAR_SIFT)
     return evaluator.eval_model()
 
 def optimize_preds():
@@ -64,4 +66,5 @@ def optimize_preds():
     print(f"BEST VALUE  :{study.best_value:.5f}")
     print(f"BEST PARAMS :{study.best_params}")
 
-optimize_preds()
+if __name__ == "__main__":
+    optimize_preds()

@@ -58,7 +58,7 @@ def detect_and_show(img, gt_mask):
     create_track_bar('binarize', win_name, 0, 1)
     create_track_bar('equalize_hist', win_name, 0, 1)
 
-    img_sep = np.full( (img.shape[0],1,3), 255, dtype=np.uint8 )
+    img_sep = np.full( (img.shape[0],3,3), 255, dtype=np.uint8 )
     gt_mask_orig = gt_mask.copy()
     gt_mask[gt_mask>0]=255
     gt_mask = cv2.cvtColor(gt_mask, cv2.COLOR_GRAY2BGR)

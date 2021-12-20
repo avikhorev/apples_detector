@@ -4,14 +4,18 @@ import cv2
 from PIL import Image
 
 class AppleDataset(object):
-    def __init__(self, root_dir='MiniApples/detection/train'):
+    def __init__(self, val=False, root_dir='MiniApples/detection/train'):
         self.root_dir = root_dir
 
         # Load all image and mask files, sorting them to ensure they are aligned
         self.img_files = list(sorted(os.listdir(os.path.join(root_dir, "images"))))
         self.mask_files = list(sorted(os.listdir(os.path.join(root_dir, "masks"))))
 
-        filt = lambda fn: fn.startswith('20150921_131234')
+        if val:
+            filt = lambda fn: fn.startswith('20150921_131346')
+        else:
+            filt = lambda fn: fn.startswith('20150921_131234')
+
         self.img_files = list(filter(filt, self.img_files))
         self.mask_files = list(filter(filt, self.mask_files))
 

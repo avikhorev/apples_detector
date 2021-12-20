@@ -13,8 +13,8 @@ def collate_fn(batch):
     return tuple(zip(*batch))
 
 class Evaluator:
-    def __init__(self):
-        self.dataset = AppleDataset()
+    def __init__(self, val=False):
+        self.dataset = AppleDataset(val=val)
 
     def eval_model(self):
         # data_loader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=False, num_workers=1, collate_fn=collate_fn)
@@ -25,10 +25,10 @@ class Evaluator:
             scores.append(s)
         return np.array(scores).mean()
 
-def main():
-    ev = Evaluator()
+def eval_model():
+    ev = Evaluator(val=True)
     avg_score = ev.eval_model()
-    print('Average IoU = ', avg_score)
+    print('Validation mean mask IoU = ', avg_score)
 
 def profile():
     import cProfile, pstats
@@ -38,5 +38,5 @@ def profile():
     s.sort_stats("time").print_stats(10)
 
 if __name__ == "__main__":
-    main()
+    eval_model()
     #profile()

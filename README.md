@@ -31,12 +31,12 @@
 
  ## Results:
   ![image](pipeline_results.jpg)
-  - Mean IoU ~0.27 on a subset containing red apples
-  - Fails on green apples
+  - Fails on green apples (trained on red)
+  - Mean **mask IoU** ~0.3 on a test subset containing red apples
+  - Ground truth segmentation masks do not contain fallen apples (so real IoU is higher)
   - Baseline [provided](https://github.com/nicolaihaeni/MinneApple) by the dataset authors: 
-    - IoU = 0.410
+    - mask IoU = 0.410
     - U-Net ( with ResNet50 backbone )
-  - Ground truth segmentation masks do not contain fallen apples
 
   
  

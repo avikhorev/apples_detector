@@ -69,7 +69,7 @@ def detect_and_show(img, gt_mask):
         read_all_track_bars(win_name)
 
         img     = blur(img)
-        mask_hsv, img = color_thresholding(img)
+        mask_hsv, img = hsv_thresholding(img)
         img = cv2.bitwise_and(img, img, mask=mask_hsv)
         gray = to_gray(img)
         circles = get_circles(gray)

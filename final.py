@@ -13,7 +13,6 @@ def get_score(mask1, mask2):
     I = np.bitwise_and(mask1,mask2).sum()
     U = np.bitwise_or(mask1,mask2).sum()
     IoU = I/U
-    # score = np.bitwise_xor(mask1,mask2).sum()
     return IoU
 
 def get_mask(img, circles):
@@ -47,11 +46,11 @@ def get_circles(gray_img):
     return list(filter(lambda c: len(c.shape)>0, circles))
 
 def blur(cimg):
-    ker_sz = PAR['blur']
-    if ker_sz%2==0: ker_sz+=1
-    return cv2.GaussianBlur(cimg, (ker_sz,ker_sz), 0)
+    ker = PAR['blur']
+    ker += (1-ker%2) #make sure kernel size is odd
+    return cv2.GaussianBlur(cimg, (ker,ker), 0)
 
-def color_thresholding(cimg):
+def hsv_thresholding(cimg):
     hsv = cv2.cvtColor(cimg, cv2.COLOR_BGR2HSV)
 
     if PAR['equalize_hist']:
@@ -79,7 +78,7 @@ def to_gray(cimg):
 
 def detect_apples(cimg):
     cimg     = blur(cimg)
-    mask_hsv,_ = color_thresholding(cimg)
+    mask_hsv,_ = hsv_thresholding(cimg)
     cimg = cv2.bitwise_and(cimg, cimg, mask=mask_hsv)
     gray = to_gray(cimg)
     circles = get_circles(gray)

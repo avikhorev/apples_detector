@@ -12,8 +12,10 @@ class AppleDataset(object):
         self.mask_files = list(sorted(os.listdir(os.path.join(root_dir, "masks"))))
 
         if val:
-            filt = lambda fn: fn.startswith('20150921_131346')
+            # test/val set ~500 images
+            filt = lambda fn: fn.startswith('20150921') 
         else:
+            # train set 59 images
             filt = lambda fn: fn.startswith('20150921_131234')
 
         self.img_files = list(filter(filt, self.img_files))

@@ -24,10 +24,10 @@ def get_mask(img, circles):
     return mask
 
 def get_circles(gray_img):
-    dp = PAR['dp']
-    param1 = PAR['param1']+1
-    param2 = PAR['param2']+1
-    min_dist = PAR['min_dist']+1
+    dp = max(PAR['dp'],1.0)
+    param1 = max(PAR['param1'],1)
+    param2 = max(PAR['param2'],1)
+    min_dist = max(PAR['min_dist'],1)
     min_radius = PAR['radius']
     max_radius = PAR['radius']+20
     circles = cv2.HoughCircles(
@@ -46,8 +46,9 @@ def get_circles(gray_img):
     return list(filter(lambda c: len(c.shape)>0, circles))
 
 def blur(cimg):
-    ker = PAR['blur']
-    ker += (1-ker%2) #make sure kernel size is odd
+    ker = max(1,PAR['blur'])
+    ker += int(1-ker%2) #make sure kernel size is odd
+    assert ker%2 
     return cv2.GaussianBlur(cimg, (ker,ker), 0)
 
 def hsv_thresholding(cimg):

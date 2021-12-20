@@ -7,7 +7,9 @@
 
 
 ## Image examples:
-![image info](https://github.com/nicolaihaeni/MinneApple/raw/master/imgs/concept.png)
+<p align="center">
+	<img src="https://github.com/nicolaihaeni/MinneApple/raw/master/imgs/concept.png" width="400">
+</p>
 
 
 ## CV class segmentation pipeline: 
